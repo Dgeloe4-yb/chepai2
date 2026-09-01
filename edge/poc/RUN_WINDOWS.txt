@@ -1,0 +1,33 @@
+Windows 本地运行步骤
+====================
+
+1. 安装 Python 3.10 或 3.11（64 位），安装时勾选 “Add Python to PATH”。
+
+2. 打开 PowerShell，进入本目录：
+   cd 你的路径\chepai2\edge\poc
+
+3. 执行（首次会创建 .venv 并下载依赖和 yolov8n 权重，需联网）：
+   .\run_windows.ps1
+
+4. 若禁止脚本，先执行：
+   Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
+
+5. 没有摄像头时，用视频文件（把路径改成你的 mp4）：
+   $env:SOURCE = "D:\clips\test.mp4"; .\run_windows.ps1
+   或直接：
+   .\.venv\Scripts\python.exe poc_pipeline.py --source D:\clips\test.mp4 --rois sample_rois.json
+
+6. 车牌识别（HyperLPR3）：
+   - 默认开启；首次在联网下会把模型拉到 用户目录\.hyperlpr3
+   - 若报 WinError 32：关掉其它占用该目录的程序，删除未完成 .zip 后重试
+   - 只用颜色条带、不要 LPR：$env:NO_LPR = "1"; .\run_windows.ps1
+   - 更高精度（更慢）：$env:LPR_HIGH = "1"; .\run_windows.ps1
+
+7. 充电枪检测（可选）：
+   使用自训 YOLO 权重（建议 ROI kind=pile 包住桩位；检测类别任意，取框中心是否在多边形内）：
+   $env:GUN_WEIGHTS = "D:\models\gun.pt"; .\run_windows.ps1
+
+8. 仅命令行、不要弹窗（无桌面）：
+   .\.venv\Scripts\python.exe poc_pipeline.py --source 0 --headless
+
+说明：本 PoC 用 CPU 跑 YOLO 可能较卡，属正常；有 NVIDIA 显卡可安装 CUDA 版 PyTorch 再跑 ultralytics 会快很多。

@@ -1,0 +1,40 @@
+# Dependencies and build output
+**/.venv/
+**/venv/
+**/node_modules/
+**/__pycache__/
+**/.pytest_cache/
+**/.idea/
+**/.dart_tool/
+**/.gradle/
+**/build/
+chepai-fronted/dist/
+chepai-bakend/build/
+edge/client/build/
+edge/client/.flutter-plugins-dependencies
+edge/client/windows/flutter/ephemeral/
+
+# Training / test sets, snapshots, local dumps
+datasets/
+**/datasets/
+data/
+edge/poc/runs/
+edge/poc/rk-recovery/
+edge/poc/weights/*.pt
+edge/poc/weights/*.onnx
+edge/poc/weights/*.rknn
+edge/poc/*.pt
+edge/poc/*.onnx
+edge/poc/*.rknn
+edge/poc/*.jpg
+edge/poc/*.log
+*.zip
+
+# Local photo / label dumps (not product code)
+充电枪采集照片1/
+充电枪采集照片2/
+已加速- 123/
+负样本/
+
+# Keep deploy secrets and MCP in this repo (requested).
+# Do not ignore: deploy.env.local, chepai-fronted/.env.production, .cursor/mcp.json

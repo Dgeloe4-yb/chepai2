@@ -1,0 +1,6 @@
+# Windows / Linux：车辆 YOLO + HyperLPR3（车牌）+ onnxruntime
+ultralytics>=8.3.0
+opencv-python>=4.9.0
+numpy>=1.26.0
+hyperlpr3>=0.1.3
+onnxruntime>=1.17.0

@@ -1,0 +1,16 @@
+[Unit]
+Description=Chepai Spring Boot Backend
+After=network.target mysql.service
+Wants=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/chepai-bakend
+EnvironmentFile=/opt/chepai-bakend/application.env
+ExecStart=/usr/bin/java -jar /opt/chepai-bakend/app.jar
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=60
+
+[Install]
+WantedBy=multi-user.target

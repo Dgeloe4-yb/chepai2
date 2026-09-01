@@ -1,0 +1,56 @@
+[Unit]
+Description=Chepai Edge Vision Agent (RK3588 production)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+NotifyAccess=main
+# Create user before enable: useradd -r -s /usr/sbin/nologin chepai
+User=chepai
+Group=chepai
+SupplementaryGroups=render video audio
+WorkingDirectory=/opt/chepai-edge
+Environment=CHEPAI_BACKEND_URL=http://38.207.179.218:18080
+Environment=CHEPAI_EDGE_BOX_ID=rk3588-01
+Environment=CHEPAI_EDGE_HOME=/opt/chepai-edge
+Environment=CHEPAI_LOCAL_CONFIG=/opt/chepai-edge/data/edge_config.json
+Environment=CHEPAI_WEIGHTS_DIR=/opt/chepai-edge/weights
+Environment=CHEPAI_SNAPSHOT_DIR=/opt/chepai-edge/snapshots
+Environment=CHEPAI_SNAPSHOT_MAX_FILES=500
+Environment=CHEPAI_ALERT_QUEUE_MAX=200
+Environment=CHEPAI_HTTP_MAX_RETRIES=3
+Environment=CHEPAI_RTSP_READ_TIMEOUT_SEC=5
+Environment=CHEPAI_INFERENCE=rknn
+Environment=CHEPAI_VEHICLE_WEIGHTS=yolov8n.rknn
+Environment=CHEPAI_MINI_AD_WEIGHTS=mini_ad.rknn
+Environment=CHEPAI_PLATE_WEIGHTS=plate_color.rknn
+Environment=CHEPAI_EDGE_TOKEN=chepai-edge-dev
+# 推理偏慢求稳：默认约 2fps（客户端/本地 rules 可覆盖）
+Environment=CHEPAI_ALERT_CONFIRM_SEC=10
+Environment=CHEPAI_ANALYZE_FPS=2
+Environment=CHEPAI_VOICE_ENABLE=1
+Environment=CHEPAI_VOICE_DIR=/opt/chepai-edge/voice
+Environment=CHEPAI_VOICE_COOLDOWN_SEC=25
+Environment=CHEPAI_VOICE_ENGINE=wav
+# 仅本服务播报时直接用 USB 卡即可（aplay -l 中 USB 卡名通常为 Device）
+Environment=CHEPAI_VOICE_ALSA_DEVICE=plughw:Device,0
+# Flutter 客户端对接生产同进程 API（海康拉流 + 标定/ROI）
+Environment=CHEPAI_LOCAL_API=1
+Environment=CHEPAI_LOCAL_API_PORT=8765
+Environment=CHEPAI_API_PREVIEW_WIDTH=1280
+Environment=PYTHONPATH=/opt/chepai-edge/edge/agent:/opt/chepai-edge
+ExecStart=/opt/chepai-edge/venv/bin/python -m chepai_edge.main
+Restart=always
+RestartSec=5
+# Type=notify: wait for READY=1 after RKNN init (3 models).
+TimeoutStartSec=120
+TimeoutStopSec=30
+# Main loop pets WATCHDOG=1 while at least one live stream still finishes infer.
+# NPU hang → grabber keeps decoding, analyze timestamp freezes → skip pet → SIGABRT.
+WatchdogSec=60
+KillMode=mixed
+MemoryMax=2G
+
+[Install]
+WantedBy=multi-user.target

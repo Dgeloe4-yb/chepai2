@@ -1,0 +1,5 @@
+# Edge agent runtime (RK3588 / dev PC)
+opencv-python-headless>=4.8
+numpy>=1.24
+# Dev/PC: ultralytics + torch (install separately on board or use venv from poc)
+ultralytics>=8.0

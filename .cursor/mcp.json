@@ -1,0 +1,23 @@
+{
+    "mcpServers": {
+      "mysql": {
+        "command": "D:/develop/nodejs/node.exe",
+        "args": [
+          "D:/develop/nodejs/node_modules/@liangshanli/mcp-server-mysql/src/server-final.js"
+        ],
+        "env": {
+          "MYSQL_HOST": "38.207.179.218",
+          "MYSQL_PORT": "3306",
+          "MYSQL_USER": "pexitong3",
+          "MYSQL_PASSWORD": "790128mmmm",
+          "MYSQL_DATABASE": "chepai",
+          "ALLOW_DDL": "true",
+          "ALLOW_DROP": "false",
+          "ALLOW_DELETE": "false",
+          "MCP_LOG_DIR": "e:/aitice/.cursor/mcp-mysql-logs",
+          "MCP_DDL_LOG_FILE": "e:/aitice/.cursor/mcp-mysql-logs/ddl.sql"
+        }
+      }
+    }
+  }
+  
